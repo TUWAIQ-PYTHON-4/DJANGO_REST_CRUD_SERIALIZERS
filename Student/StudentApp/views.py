@@ -66,7 +66,7 @@ def delete_student(request: Request, student_id):
 
 @api_view(['GET'])
 def list_top3(request: Request):
-    top = Student.objects.all().order_by('-GPA')[0:3]
+    top = Student.objects.all().order_by('GPA')[0:3]
 
     dataResponse = {
         "msg": "List of Top 3 Students",
