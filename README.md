@@ -1,4 +1,4 @@
-# DJANGO_REST_CRUD
+# DJANGO_REST_CRUD_SERIALIZERS
 
 
 # Create a new project that has API to get info about students:
