@@ -66,3 +66,11 @@ def delete_student(request: Request, student_id):
     return Response({"msg" : "Deleted Successfully"})
 
 
+@api_view(["GET"])
+def search_student(request: Request, name):
+    student = StudentsInfo.objects.filter(first_name=name)
+    if student.exists():
+        return Response({"msg": "Found it"})
+    else:
+        return Response({"msg": "Not found!!"})
+
