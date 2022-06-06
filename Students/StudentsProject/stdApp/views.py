@@ -63,3 +63,14 @@ def top_studenrs(request: Request):
 
     STDdata = {"Top_Student": list_stds[-3:]}
     return Response(STDdata)
+
+@api_view(['GET'])
+def search_name(request: Request, std_name):
+    student = StudentModel.objects.filter(first_name=std_name)
+    STDdata = {
+        "message": "write the name you would search about it :",
+        "student Name": StudentSerializer(instance=student, many=True).data
+    }
+    return Response(STDdata)
+
+
