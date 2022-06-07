@@ -33,8 +33,10 @@ def add_students(request : Request):
             "msg" : "Created Successfully",
             "new_student" : new_student.data
         }
+        
         return Response(dataResponse)
     else:
+        print("is run")
         print(new_student.errors)
         dataResponse = {"msg" : "couldn't create a Student Info"}
         return Response( dataResponse, status=status.HTTP_400_BAD_REQUEST)
@@ -73,4 +75,15 @@ def search_student(request: Request, name):
         return Response({"msg": "Found it"})
     else:
         return Response({"msg": "Not found!!"})
+
+
+@api_view(['GET'])
+def list_top_3(request: Request):
+    students = StudentsInfo.objects.filter().order_by('GPA')[0:3]
+
+    data = {
+        "msg": "The top 3 are :",
+        "students": StudentsSerializer(instance=students, many=True).data
+    }
+    return Response(data)
 
