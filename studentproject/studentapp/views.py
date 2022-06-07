@@ -55,7 +55,7 @@ def update_student(request : Request, student_id):
 
 @api_view(['DELETE'])
 def delete_student(request: Request, student_id):
-    student_dalete = student_id.objects.get(id=student_id)
+    student_dalete = student.objects.get(id=student_id)
     student_dalete.delete()
     return Response({"msg" : "Deleted Successfully"})
 
