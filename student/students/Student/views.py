@@ -65,20 +65,19 @@ def delete_student(request: Request, students_id):
 def best_student_grade(request: Request):
     lst_student = Students.objects.all().order_by('GPA')[0:3]
 
-    top_students={
+    top_students = {
 
-        "student":StudentSerializer(instance=lst_student, many=True).data
+        "student": StudentSerializer(instance=lst_student, many=True).data
 
     }
 
     return Response(top_students)
 
+
 @api_view(['GET'])
-def search_students(request: Request,new_name):
-    search_s= Students.objects.filter(first_name=new_name)
-    search_student={
+def search_students(request: Request, new_name):
+    search_s = Students.objects.filter(first_name=new_name)
+    search_student = {
         "student": StudentSerializer(instance=search_s, many=True).data
     }
-    return Response(search_students)
-
-
+    return Response(search_student)
