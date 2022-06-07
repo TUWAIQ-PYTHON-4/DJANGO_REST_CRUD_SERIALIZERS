@@ -27,7 +27,7 @@ def add_student(request: Request):
 
 @api_view(['GET'])
 def list_students(request: Request):
-    students = Student.objects.order_by("GPA")
+    students = Student.objects.order_by("-GPA")
 
     dataResponse = {
         "msg": "List of All Students",
@@ -59,3 +59,24 @@ def delete_student(request: Request, student_id):
     student = Student.objects.get(id=student_id)
     student.delete()
     return Response({"msg": "Deleted Successfully"})
+
+
+@api_view(['GET'])
+def search_student(request: Request,first_name):
+    students = Student.objects.filter(first_name=first_name)
+
+    data={
+        "msg" : "the name is :",
+        "students": StudentSerializer(instance=students, many=True).data
+    }
+    return Response(data)
+
+@api_view(['GET'])
+def top_3(request: Request):
+    students = Student.objects.filter().order_by('-GPA')[0:3]
+
+    data = {
+        "msg": "The Top 3 are :",
+        "students": StudentSerializer(instance=students, many=True).data
+    }
+    return Response(data)
