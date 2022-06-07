@@ -4,10 +4,11 @@ from django.shortcuts import render
 from rest_framework.decorators import api_view
 from rest_framework.request import Request
 from rest_framework.response import Response
-from rest_framework import status , DjangoFilterBackend
+from rest_framework import status
 from .models import student
 from .serializers import studentSerializer
 from rest_framework.filters import SearchFilter
+#from django_filters.rest_framework import DjangoFilterBackend
 
 @api_view(['POST'])
 def add_student(request : Request):
@@ -37,19 +38,19 @@ def list_student(request : Request):
     return Response(dataResponse)
 
 @api_view(['PUT'])
-def update_student(request : Request, city_id):
-    student_update = student.objects.get(id=city_id)
+def update_student(request : Request, student_id):
+    student_update = student.objects.get(id=student_id)
 
-    updated_city = studentSerializer(instance=student_update, data=request.data)
-    if updated_city.is_valid():
-        updated_city.save()
+    updated_student = studentSerializer(instance=student_update, data=request.data)
+    if updated_student.is_valid():
+        updated_student.save()
         responseData = {
             "msg" : "updated successefully"
         }
 
         return Response(responseData)
     else:
-        print(updated_city.errors)
+        print(updated_student.errors)
         return Response({"msg" : "bad request, cannot update"}, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['DELETE'])
@@ -60,13 +61,21 @@ def delete_student(request: Request, student_id):
 
 
 @api_view(['GET'])
-def search(request: Request):
-    student_search = student.objects.all()
-    serilaiz_student= studentSerializer()
-    filter_backends = (DjangoFilterBackend , SearchFilter)
-    fitter_fields = ('first_name')
+def search(request: Request , first_name):
+    student_search = student.objects.filter(first_name=first_name)
+    Student = {
+        "msg" : "done",
+        "student" : studentSerializer(instance=student_search, many=True).data
+    }
+    return Response(Student)
+    
 
 @api_view(['GET'])
 def orderingviws(request: Request):
-    student_order = student.objects.all()
-    after_order = sorted(student_order , key=student_order['GPA'] )
+    student_order = student.objects.all().order_by('GPA')
+    Student = {
+        "msg": "done",
+        "student": studentSerializer(instance=student_order, many=True).data
+    }
+    return Response(Student)
+
