@@ -63,15 +63,22 @@ def delete_student(request: Request, students_id):
 
 @api_view(['GET'])
 def best_student_grade(request: Request):
-    lst_student = Students.GPA
-    highest_grade = 0  # "max" is a terrible name for a variable
-    for student, grade in Students:
-        if grade > highest_grade:
-            lst_student = highest_grade
-            best_student = student
-    return highest_grade, lst_student
+    lst_student = Students.objects.all().order_by('GPA')[0:3]
+
+    top_students={
+
+        "student":StudentSerializer(instance=lst_student, many=True).data
+
+    }
+
+    return Response(top_students)
+
+@api_view(['GET'])
+def search_students(request: Request,new_name):
+    search_s= Students.objects.filter(first_name=new_name)
+    search_student={
+        "student": StudentSerializer(instance=search_s, many=True).data
+    }
+    return Response(search_students)
 
 
-bstudent, bgrade = best_student_grade()
-
-print(f"The best student is: {bstudent} with a {bgrade}")
